@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <meta charset="UTF-8">
+    <title>dom事件</title>
+    <style>
+        input:focus{
+            border-color: #e07173;
+            background: #fbcb81;
+        }
+    </style>
+</head>
+<body>
+
+<div id="example"></div>
+<script type="text/babel">
+    var MyInput = React.createClass({
+            /*根据React.PropTypes来设置title字段为非空字符串*/
+        propTypes:{
+            title:React.PropTypes.string.isRequired
+        },
+            /*设置默认值*/
+        getDefaultProps:function(){
+            return {
+                name:'Tommiy'
+            };
+        },
+    /*定义真实dom元素的点击事件，input里必须有个属性ref，然后 this.refs.[refName] 就会返回这个真实的 DOM 节点*/
+        handleClick:function(){
+            this.refs.myNameText.focus();
+        },
+        handleFocus:function(){
+            console.log(this.refs);
+        },
+        render:function(){
+            return <div>
+                <h1>{this.props.title}</h1>
+                <input type='text' value={this.props.name} ref='myNameText'/>
+                    <br/>
+                <input type='text' ref='yourNameText' onFocus={this.handleFocus}/>
+                    <button onClick={this.handleClick}>确定</button>
+            </div>
+        }
+    });
+
+    ReactDOM.render(<MyInput title='User register'/>,document.getElementById('example'));
+</script>
+</body>
+</html>

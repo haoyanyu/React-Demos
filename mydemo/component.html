@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <title>组件</title>
+    <style>
+        .authorName {
+            background: #A1A1A1;
+            color: #fff;
+            padding: 3px;
+            line-height: 1.25em;
+            font-size: 5vw;
+            width: 30vw;
+            min-width: 25vw;
+        }
+    </style>
+</head>
+<body>
+    <div id="example"></div>
+    <div id="example2"></div>
+    <script type="text/babel">
+       /*创建一个变量，作为样式 style={myButton}*/
+        var myButton = {
+            background:'#7AD0D8',
+            color:'#fff',
+            fontSize:20,
+            lineHeight:1.5,
+            border:'none',
+            borderRadius:'5px',
+            textAlign:'center'
+        }
+        /*创建组件 React.createClass()方法，生成一个组件类 组件类变量用大写字母开头*/
+        /*定义组件的两种方式*/
+        /*第一种*/
+        var HelloMessage = React.createClass({
+            render: function(){
+                return <div>
+                <h1>hello {this.props.name}</h1>
+                <h1>hello {this.props.name}</h1>
+                <button style={myButton}>点我一下</button>
+                </div>;
+            }
+        })
+        /*第二种*/
+        class Greating extends React.Component{
+            render(){
+                return <h1>hello,{this.props.name}</h1>
+            }
+        }
+        var myname = 'lily';
+        ReactDOM.render(
+                <Greating name={myname}/>,
+                document.getElementById('example')
+        );
+
+        /***************************************************************************************/
+        /*定义一个数组，存放用户信息*/
+        const comment = [{
+            date: new Date(),
+            text: 'I hope you enjoy learning React!',
+            author: {
+                name: 'Hello Kitty',
+                avatarUrl: 'http://placekitten.com/g/64/64'
+            }
+        },
+            {
+                date: new Date(),
+                text: 'I hope you enjoy learning React!',
+                author: {
+                    name: 'Hello Boy',
+                    avatarUrl: 'http://placekitten.com/g/64/64'
+                }
+            }
+        ];
+        /*定义一个方法，格式化时间*/
+        function formatDate(date) {
+            return date.toLocaleDateString();
+        }
+        /*定义一个组件 包括用户图片 名字 以及介绍和时间*/
+        var Comment = React.createClass({
+            render:function(){
+                return <div>
+                        <div>
+                            <img src={this.props.author.avatarUrl}/>
+                            <p className='authorName'>{this.props.author.name}</p>
+                        </div>
+                        <div>{this.props.text}</div>
+                        <div>{formatDate(this.props.date)}</div>
+                </div>
+            }
+        });
+        ReactDOM.render(
+                <div>
+        {comment.map(function(comment){return <Comment date={comment.date} text={comment.text} author={comment.author}/>})}
+                </div>,
+                document.getElementById('example2')
+        )
+    </script>
+</body>
+</html>

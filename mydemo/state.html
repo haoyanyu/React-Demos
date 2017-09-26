@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <meta charset="UTF-8">
+    <title>状态及其生命周期</title>
+</head>
+<body>
+<div id="example"></div>
+<div id="clock1"></div>
+<div id="clock2"></div>
+<div id="clock3"></div>
+<div id="opacity"></div>
+<script type="text/babel">
+    /*切换按钮*/
+    var LikeButton = React.createClass({
+
+        getInitialState:function(){
+            return {
+                    liked:false,
+                    value:'Hello!'
+                    };
+        },
+        handleClick:function(){
+            this.setState({liked:!this.state.liked});
+        },
+        handleChange:function(e){
+            this.setState({value: e.target.value});
+        },
+        render:function(){
+            var text = this.state.liked?'liked':'not liked';
+            var value = this.state.value;
+            return (
+                            <div>
+                                <p onClick={this.handleClick}> you {text} This. Click to toggle ! </p>
+                                <input type='text' value={value} onChange={this.handleChange}/>
+                                <p>{value}</p>
+                            </div>
+
+                    )
+        }
+    });
+    ReactDOM.render(<LikeButton/>,document.getElementById('example'));
+
+
+    /*时钟*/
+   /*方法一、通过不断的创建新的dom来实现时间的变化*/
+    function tick(){
+        const element = (
+                <div>
+                    <p>方法一</p>
+                    <h1>Hello World</h1>
+                    <h2>It is {new Date().toLocaleTimeString()}</h2>
+                </div>
+        );
+        ReactDOM.render(element,document.getElementById('clock1'));
+    }
+
+    setInterval(tick,1000);
+
+
+    /*方法二、通过不断渲染组件，获取时间 通过this.props来获取时间*/
+    var Clock2 = React.createClass({
+        render:function(){
+            return (
+                    <div>
+                        <p>方法二</p>
+                        <h1>Hello World</h1>
+                        <h2>It is {this.props.date.toLocaleTimeString()}</h2>
+                    </div>
+            )
+        }
+    });
+    function tick2(){
+        ReactDOM.render(<Clock2 date={new Date()}/>,document.getElementById('clock2'));
+    }
+     setInterval(tick2,1000);
+
+
+    /*方法三、通过this.state来更新时间 涉及state的生命周期*/
+    class Clock3 extends React.Component{
+        /*添加构造函数来指定this.state的初始值*/
+        constructor(props) {
+            super(props);
+            this.state = {date: new Date()};
+        }
+
+        tick(){
+            this.setState({
+                date:new Date()
+            });
+        }
+
+        componentDidMount(){
+            this.timerId = setInterval(
+                    ()=>this.tick(),
+                    1000
+            );
+        }
+        componentWillUnmount(){
+            clearInterval(this.timerId);
+        }
+        render(){
+            return(
+                    <div>
+                        <p>方法三</p>
+                        <h1>Hello World</h1>
+                        <h2>It is {this.state.date.toLocaleTimeString()}</h2>
+                    </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<Clock3 />,document.getElementById('clock3'));
+
+
+
+    /*通过state来控制组件的透明度变化*/
+    class Opacity extends React.Component{
+        constructor(props){
+            super(props);
+            this.state = {opacity:1};
+    }
+
+        tick(){
+            var opacity = this.state.opacity;
+            opacity -= 0.1;
+            if(opacity<0.1) {
+                opacity = 1;
+            }
+            this.setState({opacity:opacity});
+        }
+        componentDidMount(){
+            /*this.timer = setInterval(function(){
+                var opacity = this.state.opacity;
+                opacity -= 0.5;
+                if(opacity<0.1) {
+                    opacity = 1;
+                }
+                this.setState({opacity:opacity});
+            }.bind(this),1000)*/
+
+            this.timer = setInterval(
+                    ()=>this.tick(),
+                    500
+            )
+        }
+        render(){
+            return(
+                    <div style={{opacity:this.state.opacity,color:'red',fontSize:'18px',fontWeight:'bold'}}>
+                        <p>hello {this.props.name}</p>
+                    </div>
+            )
+        }
+    }
+    ReactDOM.render(<Opacity name='haha'/>,document.getElementById('opacity'));
+    
+</script>
+
+</body>
+</html>

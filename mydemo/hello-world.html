@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <!--<script src="../build/browser.min.js"></script>-->
+    <title>hello world 数组遍历</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+    /*<!-- css以对象形式-->*/
+    var pStyle = {
+        background:'#e3765a',
+        color:'#fff',
+        lineHeight:1.5
+    }
+    var liArray = [
+            '苹果',
+            '香蕉',
+            '火龙果',
+            '猕猴桃'
+    ]
+    ReactDOM.render(
+    <div>
+        <h1>hello world</h1>
+        <p style={pStyle}>用户输入手机号和密码，点击登录按钮，系统通过认证后进入商城，未通过认证，提示用户登录失败原因</p>
+        <p style={pStyle}>用户输入手机号和密码，点击登录按钮，系统通过认证后进入商城，未通过认证，提示用户登录失败原因</p>
+        <div>{1+3}</div>
+        <ul>
+            <li>{liArray[0]}</li>
+            <li>{liArray[1]}</li>
+            <li>{liArray[2]}</li>
+            <li>{liArray[3]}</li>
+        </ul>
+        {
+        /*.map()方法，遍历数组，返回一个新数组*/
+        liArray.map(function(name){return <li>{name}</li>})
+        }
+
+    </div>,
+            document.getElementById('example')
+    );
+</script>
+</body>
+</html>
